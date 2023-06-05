@@ -1,0 +1,100 @@
+package com.example.trilhasegura;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+
+import android.app.Activity;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.drawable.Drawable;
+import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptor;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import java.util.ArrayList;
+import java.util.List;
+
+public class MapActivity extends AppCompatActivity implements OnMapReadyCallback{
+
+    private GoogleMap map;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_map);
+
+        SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
+        mapFragment.getMapAsync(this);
+
+    }
+
+    @Override
+    public void onMapReady(@NonNull GoogleMap googleMap) {
+
+        map = googleMap;
+        List<MarkerOptions> listaMarcadores = new ArrayList<>();
+
+        Bundle bundle = getIntent().getExtras();
+        String type = getIntent().getStringExtra("TYPE");
+        LatLng latLng = new LatLng(bundle.getDouble("latitude"), bundle.getDouble("longitude"));
+
+        if(bundle != null && type != null){
+            if(type.equals("animal")){
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .icon(setIcon(MapActivity.this, R.drawable.animal_semfundo));
+                listaMarcadores.add(markerOptions);
+            }
+            else if(type.equals("escorregadia")){
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .icon(setIcon(MapActivity.this, R.drawable.escorregadia_semfundo));
+                listaMarcadores.add(markerOptions);
+            }
+            else if(type.equals("mataburro")){
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .icon(setIcon(MapActivity.this, R.drawable.placa_mataburro));
+                listaMarcadores.add(markerOptions);
+            }
+            else if(type.equals("buraco")){
+                MarkerOptions markerOptions = new MarkerOptions()
+                        .position(latLng)
+                        .icon(setIcon(MapActivity.this, R.drawable.buraco_semfundo));
+                listaMarcadores.add(markerOptions);
+            }
+        }
+        for (MarkerOptions markerOptions : listaMarcadores) {
+            map.addMarker(markerOptions);
+        }
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(latLng, 15));
+    }
+
+
+    public BitmapDescriptor setIcon(Activity context, int drawableID){
+
+        Drawable drawable = ActivityCompat.getDrawable(context, drawableID);
+
+        drawable.setBounds(0, 0, drawable.getIntrinsicHeight(), drawable.getIntrinsicWidth());
+
+        Bitmap bitmap = Bitmap.createBitmap(drawable.getIntrinsicWidth(), drawable.getIntrinsicHeight(), Bitmap.Config.ARGB_8888);
+
+        Canvas canvas = new Canvas(bitmap);
+
+        drawable.draw(canvas);
+
+        return BitmapDescriptorFactory.fromBitmap(bitmap);
+
+    }
+}
