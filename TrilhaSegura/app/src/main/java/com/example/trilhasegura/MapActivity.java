@@ -41,48 +41,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
-
-        /*backDrop = findViewById(R.id.back);
-
-        final FloatingActionButton fabPin = findViewById(R.id.fab_pin);
-        final FloatingActionButton fabTrack = findViewById(R.id.fab_track);
-        final FloatingActionButton fabAdd = findViewById(R.id.fab_add);
-
-        lytPin = findViewById(R.id.lyt_pin);
-        lytTrack = findViewById(R.id.lyt_track);
-
-        ViewAnimation.initShowOut(lytPin);
-        ViewAnimation.initShowOut(lytTrack);
-        backDrop.setVisibility(View.GONE);
-
-        fabAdd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMode(v);
-            }
-        });
-
-        backDrop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                toggleFabMode(fabAdd);
-            }
-        });
-
-        fabPin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(OptionActivity.this, "Setting Pin", Toast.LENGTH_SHORT).show();
-            }
-        });
-
-        fabTrack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Toast.makeText(OptionActivity.this, "Tracking...", Toast.LENGTH_SHORT).show();
-            }
-        });*/
-
     }
 
     @Override
