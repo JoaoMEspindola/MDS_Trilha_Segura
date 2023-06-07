@@ -11,6 +11,7 @@ import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
+import android.widget.FrameLayout;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
@@ -29,6 +30,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
     private GoogleMap map;
 
+    private View backDrop;
+    private boolean rotate = false;
+    private View lytPin, lytTrack;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -36,6 +41,47 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager().findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+
+        /*backDrop = findViewById(R.id.back);
+
+        final FloatingActionButton fabPin = findViewById(R.id.fab_pin);
+        final FloatingActionButton fabTrack = findViewById(R.id.fab_track);
+        final FloatingActionButton fabAdd = findViewById(R.id.fab_add);
+
+        lytPin = findViewById(R.id.lyt_pin);
+        lytTrack = findViewById(R.id.lyt_track);
+
+        ViewAnimation.initShowOut(lytPin);
+        ViewAnimation.initShowOut(lytTrack);
+        backDrop.setVisibility(View.GONE);
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFabMode(v);
+            }
+        });
+
+        backDrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFabMode(fabAdd);
+            }
+        });
+
+        fabPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(OptionActivity.this, "Setting Pin", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fabTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(OptionActivity.this, "Tracking...", Toast.LENGTH_SHORT).show();
+            }
+        });*/
 
     }
 
@@ -96,5 +142,18 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         return BitmapDescriptorFactory.fromBitmap(bitmap);
 
+    }
+
+    private void toggleFabMode(View v){
+        rotate = ViewAnimation.rotateFab(v, !rotate);
+        if(rotate){
+            ViewAnimation.showIn(lytPin);
+            ViewAnimation.showIn(lytTrack);
+            backDrop.setVisibility(View.VISIBLE);
+        }else{
+            ViewAnimation.showOut(lytTrack);
+            ViewAnimation.showOut(lytPin);
+            backDrop.setVisibility(View.GONE);
+        }
     }
 }

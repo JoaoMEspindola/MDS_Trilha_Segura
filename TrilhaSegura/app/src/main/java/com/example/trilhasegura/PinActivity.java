@@ -7,12 +7,8 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.RadioButton;
-import android.widget.RadioGroup;
-import android.widget.Toast;
 
-import com.google.android.gms.maps.model.LatLng;
-
-public class SecondActivity extends AppCompatActivity {
+public class PinActivity extends AppCompatActivity {
 
     RadioButton animal, buraco, mataburro, escorregadia;
     Button btn;
@@ -36,25 +32,25 @@ public class SecondActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (animal.isChecked()) {
-                    Intent intent = new Intent(SecondActivity.this, MapActivity.class);
+                    Intent intent = new Intent(PinActivity.this, MapActivity.class);
                     intent.putExtra("TYPE", "animal");
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
                 else if (buraco.isChecked()) {
-                    Intent intent = new Intent(SecondActivity.this, MapActivity.class);
+                    Intent intent = new Intent(PinActivity.this, MapActivity.class);
                     intent.putExtra("TYPE", "buraco");
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
                 else if (mataburro.isChecked()) {
-                    Intent intent = new Intent(SecondActivity.this, MapActivity.class);
+                    Intent intent = new Intent(PinActivity.this, MapActivity.class);
                     intent.putExtra("TYPE", "mataburro");
                     intent.putExtras(bundle);
                     startActivity(intent);
                 }
                 else if (escorregadia.isChecked()) {
-                    Intent intent = new Intent(SecondActivity.this, MapActivity.class);
+                    Intent intent = new Intent(PinActivity.this, MapActivity.class);
                     intent.putExtra("TYPE", "escorregadia");
                     intent.putExtras(bundle);
                     startActivity(intent);
