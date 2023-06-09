@@ -110,7 +110,9 @@ public class LocationActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 if (hasLocationPermissions()) {
-                    setupLocationUpdates();
+                    Intent intent = new Intent(LocationActivity.this, MapActivity.class);
+                    intent.putExtra("buttonClicked", true);
+                    startActivity(intent);
                 } else {
                     if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
                         showCustomDialog("Location Permission", "This app needs the location permission to track your location.", "Ok.", new DialogInterface.OnClickListener() {
@@ -125,9 +127,6 @@ public class LocationActivity extends AppCompatActivity {
                 }
             }
         });
-
-        IntentFilter intentFilter = new IntentFilter("STOP_LOCATION_UPDATES");
-        registerReceiver(stopLocationUpdatesReceiver, intentFilter);
     }
 
     void showCustomDialog(String title, String message, String positivieBtnTitle, DialogInterface.OnClickListener positiveListener, String negativeBtnTitle, DialogInterface.OnClickListener negativeListener) {
@@ -204,106 +203,4 @@ public class LocationActivity extends AppCompatActivity {
             }
         });
     }
-
-    private final static int REQUEST_CHECK_CODE = 1001;
-
-    private void setupLocationUpdates() {
-        LocationRequest locationRequest = new LocationRequest.Builder(5000)
-                .setGranularity(Granularity.GRANULARITY_FINE)
-                .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
-                .setMinUpdateDistanceMeters(5)
-                .build();
-
-        LocationSettingsRequest locationSettingsRequest = new LocationSettingsRequest.Builder()
-                .addLocationRequest(locationRequest)
-                .build();
-
-        SettingsClient settingsClient = LocationServices.getSettingsClient(this);
-
-        settingsClient.checkLocationSettings(locationSettingsRequest).addOnCompleteListener(new OnCompleteListener<LocationSettingsResponse>() {
-            @Override
-            public void onComplete(@NonNull Task<LocationSettingsResponse> task) {
-                if (task.isSuccessful()) {
-
-                    if (ActivityCompat.checkSelfPermission(LocationActivity.this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(LocationActivity.this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
-                        // TODO: Consider calling
-                        //    ActivityCompat#requestPermissions
-                        // here to request the missing permissions, and then overriding
-                        //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                        //                                          int[] grantResults)
-                        // to handle the case where the user grants the permission. See the documentation
-                        // for ActivityCompat#requestPermissions for more details.
-                        return;
-                    }
-                    fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, Looper.getMainLooper());
-
-                }else{
-                    if(task.getException() instanceof ResolvableApiException){
-                        try {
-                            ResolvableApiException resolvableApiException = (ResolvableApiException) task.getException();
-                            resolvableApiException.startResolutionForResult(LocationActivity.this, REQUEST_CHECK_CODE);
-                        } catch (IntentSender.SendIntentException e) {
-                            throw new RuntimeException(e);
-                        }
-                    }else{
-
-                    }
-                }
-            }
-        });
-    }
-    LocationCallback locationCallback = new LocationCallback() {
-        @Override
-        public void onLocationResult(@NonNull LocationResult locationResult) {
-            super.onLocationResult(locationResult);
-            Location location = locationResult.getLastLocation();
-            LatLng currentLatLng = new LatLng(location.getLatitude(), location.getLongitude());
-
-            MyApplication myApp = (MyApplication) getApplication();
-            List<LatLng> coordinatesList = myApp.getCoordinatesList();
-            coordinatesList.add(currentLatLng);
-
-            Intent intent = new Intent(LocationActivity.this, MapActivity.class);
-            intent.putExtra("buttonClicked", true);
-            startActivity(intent);
-        }
-    };
-
-    private BroadcastReceiver stopLocationUpdatesReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            stopLocationUpdates();
-        }
-    };
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-
-        // Remove o registro do BroadcastReceiver
-        unregisterReceiver(stopLocationUpdatesReceiver);
-    }
-
-    private void stopLocationUpdates() {
-        // Para as solicitações de atualizações de localização
-        // ...
-
-        // Exemplo de código para parar as atualizações de localização:
-        // ...
-        LocationServices.getFusedLocationProviderClient(this)
-                .removeLocationUpdates(locationCallback)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            Log.d("demo", "Atualizações de localização paradas com sucesso");
-                        } else {
-                            Log.e("demo", "Falha ao parar as atualizações de localização");
-                        }
-                    }
-                });
-        // ...
-    }
-
 }
-
