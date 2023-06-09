@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "835323646388",
+    "project_id": "trilhasegura-285c0",
+    "storage_bucket": "trilhasegura-285c0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:835323646388:android:e428d785156920733162e1",
+        "android_client_info": {
+          "package_name": "com.example.trilhasegura"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "835323646388-vh5frgc4nuv701nrntuit0dh96j0lqja.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCsHB4VgzVaXPU_FWKir3R0IstcRPcY0GA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "835323646388-vh5frgc4nuv701nrntuit0dh96j0lqja.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
