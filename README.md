@@ -49,3 +49,8 @@ Este MVP do Trilha Segura fornece uma base para futuras iterações e melhorias.
 - Expandir o conjunto de PINs.
 - Adicionar recursos de pesquisa e navegação em trilhas existentes.
 - Permitir a exclusão de PINs existentes que podem ser temporários.
+
+## Funcionamento do Aplicativo
+
+No link abaixo, será possível ver um breve funcionamento das funções anteriormente listadas. Gravação feita diretamente do emulador do AndroidStudio.
+<a href="https://youtu.be/QQBdJ5aXxvM">Vídeo do funcionamento.</a>
