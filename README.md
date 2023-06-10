@@ -9,21 +9,21 @@ O objetivo deste MVP (Minimum Viable Product) é fornecer funcionalidades básic
 1. **Set Pin:** Ao clicar no botão "Set Pin", o usuário pode adicionar um marcador (PIN) em uma posição específica do mapa (a que ele está no momento, como pode ser vista na Imagem 1). Isso permite que os usuários marquem locais de interesse ou pontos de referência relevantes para futuras referências. Neste MVP o aplicativo possui um conjunto inicial de eventos que podem ser sinalizados ao longo da trilha (Imagem 2). Sendo as seguintes opções: Pista Escorregadia, Buraco, Mata-Burro e Animal na Trilha. Esses eventos servem para demonstrar a capacidade do aplicativo de sinalizar pontos de interesse e possíveis obstáculos ao longo do caminho, demonstrando. Ao finalizar o PIN estará disponível no mapa como é possível ver na Imagem 3.
 
 <p align="center">
-  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/2beeeea6-2091-4de2-8062-a6f39fa67c74" alt="Tela Inicial" height="450px">
+  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/a0400c27-bb52-4187-b3c3-95801b151174" alt="Tela Inicial" height="450px">
 </p>
 
 <p align="center">
-  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/9af57cba-0a4b-4d2e-ac37-835d232fb662" alt="Tela de Setar PIN" height="450px">
+  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/e2d5b231-5ace-4f2f-874b-08e91a7a37f7" alt="Tela de Setar PIN" height="450px">
 </p>
 
 <p align="center">
-  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/233899b8-6c09-4af4-9013-ef5a278afe37" alt="Tela Inicial com PIN setado" height="450px">
+  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/49202702/244843313-ff0ba8a9-a74f-4066-8d63-27e05e5f2425.jpg" alt="Tela Inicial com PIN setado" height="450px">
 </p>
 
 2. **Start Tracking:** Ao clicar no botão "Start Tracking", o aplicativo registra o caminho percorrido pelo usuário em tempo real (Imagem 4). Isso permite que os usuários gravem suas trilhas, importante para que revisitem-nas posteriormente ou as compartilhem com amigos. Como é possível ver pela imagem, ao iniciar o tracking, um pequeno botão de stop aparecerá no canto direito inferior da tela permitindo que termine de se marcar a rota atual.
 
 <p align="center">
-  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/791d53fb-6630-4dd7-92e4-7bca3cd6d42b" alt="Tela com Rota sendo traçada" height="450px">
+  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/fbfe6d18-7b6b-406d-aa88-038a96da903c" alt="Tela com Rota sendo traçada" height="450px">
 </p>
 
 ## Tecnologias Utilizadas
