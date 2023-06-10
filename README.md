@@ -52,5 +52,5 @@ Este MVP do Trilha Segura fornece uma base para futuras iterações e melhorias.
 
 ## Funcionamento do Aplicativo
 
-No link abaixo, será possível ver um breve funcionamento das funções anteriormente listadas. Gravação feita diretamente do emulador do AndroidStudio.
+<p>No link abaixo, será possível ver um breve funcionamento das funções anteriormente listadas. Gravação feita diretamente do emulador do AndroidStudio.</p>
 <a href="https://youtu.be/QQBdJ5aXxvM">Vídeo do funcionamento.</a>
