@@ -102,6 +102,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     @Override
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
+        setupMarkers();
 
         boolean buttonClicked = getIntent().getBooleanExtra("buttonClicked", false);
 
@@ -116,12 +117,15 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 requestLocationPermission();
             }
         } else {
-            setupMarkers();
             Bundle bundle = getIntent().getExtras();
             double latitude = bundle.getDouble("latitude");
             double longitude = bundle.getDouble("longitude");
             LatLng currentPosition = new LatLng(latitude, longitude);
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 20));
+            MarkerOptions markerOptions = new MarkerOptions()
+                    .title("Você")
+                    .position(currentPosition);
+            map.addMarker(markerOptions);
+            map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 15));
         }
     }
 
