@@ -8,11 +8,11 @@ O objetivo deste MVP (Minimum Viable Product) é fornecer funcionalidades básic
 
 1. **Set Pin:** Ao clicar no botão "Set Pin", o usuário pode adicionar um marcador (PIN) em uma posição específica do mapa (a que ele está no momento, como pode ser vista na Imagem 1). Isso permite que os usuários marquem locais de interesse ou pontos de referência relevantes para futuras referências. Neste MVP o aplicativo possui um conjunto inicial de eventos que podem ser sinalizados ao longo da trilha (Imagem 2). Sendo as seguintes opções: Pista Escorregadia, Buraco, Mata-Burro e Animal na Trilha. Esses eventos servem para demonstrar a capacidade do aplicativo de sinalizar pontos de interesse e possíveis obstáculos ao longo do caminho, demonstrando. Ao finalizar o PIN estará disponível no mapa como é possível ver na Imagem 3.
 
-![3ed77f0c-cff2-47e1-b933-2f250eb8d19a](https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/233899b8-6c09-4af4-9013-ef5a278afe37)
-
 ![efc07c9a-8419-4887-89a1-96105deb4b77](https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/2beeeea6-2091-4de2-8062-a6f39fa67c74)
 
 ![93659fa2-608a-4ef0-b417-b905bec624e5](https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/9af57cba-0a4b-4d2e-ac37-835d232fb662)
+
+![3ed77f0c-cff2-47e1-b933-2f250eb8d19a](https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/233899b8-6c09-4af4-9013-ef5a278afe37)
 
 2. **Start Tracking:** Ao clicar no botão "Start Tracking", o aplicativo registra o caminho percorrido pelo usuário em tempo real (Imagem 4). Isso permite que os usuários gravem suas trilhas, importante para que revisitem-nas posteriormente ou as compartilhem com amigos. Como é possível ver pela imagem, ao iniciar o tracking, um pequeno botão de stop aparecerá no canto direito inferior da tela permitindo que termine de se marcar a rota atual.
 
