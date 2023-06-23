@@ -1,11 +1,5 @@
 package com.example.trilhasegura;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.ActivityCompat;
-
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -18,6 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Granularity;
@@ -93,7 +93,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             public void onClick(View v) {
                 stopLocationUpdates();
                 stopTracking();
-                finish();
             }
         });
 
