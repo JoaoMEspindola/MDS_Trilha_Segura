@@ -105,6 +105,7 @@
                     app:contentPadding="5dp">
 
                     <TextView
+                        android:id="@+id/text_track"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:text="Start Tracking"
@@ -130,7 +131,27 @@
                     android:src="@drawable/baseline_route_24"
                     android:backgroundTint="@color/primary"/>
 
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_stop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginLeft="18dp"
+                    android:contentDescription="Stop tracking"
+                    android:clickable="true"
+                    app:tint="@color/white"
+                    app:fabSize="mini"
+                    app:rippleColor="@color/black"
+                    app:borderWidth="0dp"
+                    android:src="@drawable/baseline_stop_24"
+                    android:backgroundTint="#FFF13A5E"
+                    android:visibility="gone"/>
+
             </LinearLayout>
+
+
         </LinearLayout>
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton

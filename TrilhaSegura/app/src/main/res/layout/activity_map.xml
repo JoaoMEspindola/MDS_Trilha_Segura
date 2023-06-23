@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.coordinatorlayout.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -13,25 +13,163 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+    <androidx.viewpager.widget.ViewPager
+        android:id="@+id/back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:contentDescription="Tracking location"
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:background="@color/dark_30"/>
+
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:layout_gravity="bottom|end"
-        android:gravity="center_vertical">
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:gravity="end|right">
 
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/fabStopTracking"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:contentDescription="button"
-            android:src="@drawable/baseline_stop_circle_24"
-            app:layout_anchor="@id/map"
-            app:layout_anchorGravity="bottom|end"
-            app:backgroundTint="@color/white"
-            android:layout_gravity="center_vertical" />
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/lyt_pin"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end|right"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="3dp"
+                    app:contentPadding="5dp">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Set Pin"
+                        style="@style/TextAppearance.AppCompat.Body2"
+                        android:gravity="center"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_pin"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginLeft="18dp"
+                    android:clickable="true"
+                    android:contentDescription="Set your pin"
+                    app:tint="@color/white"
+                    app:fabSize="mini"
+                    app:rippleColor="@color/white"
+                    app:borderWidth="0dp"
+                    android:src="@drawable/baseline_add_location_alt_24"
+                    android:backgroundTint="@color/primary"/>
+
+            </LinearLayout>
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/lyt_track"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <androidx.cardview.widget.CardView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical|end|right"
+                    android:layout_margin="10dp"
+                    android:background="@color/white"
+                    app:cardElevation="2dp"
+                    app:cardCornerRadius="3dp"
+                    app:contentPadding="5dp">
+
+                    <TextView
+                        android:id="@+id/text_track"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Start Tracking"
+                        style="@style/TextAppearance.AppCompat.Body2"
+                        android:gravity="center"/>
+
+                </androidx.cardview.widget.CardView>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fab_track"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginLeft="18dp"
+                    android:contentDescription="Start tracking"
+                    android:clickable="true"
+                    app:tint="@color/white"
+                    app:fabSize="mini"
+                    app:rippleColor="@color/black"
+                    app:borderWidth="0dp"
+                    android:src="@drawable/baseline_route_24"
+                    android:backgroundTint="@color/primary"/>
+
+                <com.google.android.material.floatingactionbutton.FloatingActionButton
+                    android:id="@+id/fabStopTracking"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="10dp"
+                    android:layout_marginRight="18dp"
+                    android:layout_marginLeft="18dp"
+                    android:contentDescription="Stop tracking"
+                    android:clickable="true"
+                    app:tint="@color/white"
+                    app:fabSize="mini"
+                    app:rippleColor="@color/black"
+                    app:borderWidth="0dp"
+                    android:src="@drawable/baseline_stop_24"
+                    android:backgroundTint="#FFF13A5E"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+
+        </LinearLayout>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+            android:id="@+id/fab_add"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp"
+            android:layout_marginRight="18dp"
+            android:layout_marginLeft="18dp"
+            android:clickable="true"
+            android:contentDescription="See options"
+            app:tint="@color/white"
+            app:fabSize="normal"
+            app:rippleColor="@color/black"
+            app:borderWidth="0dp"
+            android:src="@drawable/baseline_add_24"
+            android:backgroundTint="@color/primary"/>
 
     </LinearLayout>
 
@@ -39,4 +177,4 @@
 
 
 
-</androidx.coordinatorlayout.widget.CoordinatorLayout>
+</RelativeLayout>

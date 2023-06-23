@@ -16,6 +16,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.Granularity;
@@ -61,6 +63,13 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private List<LatLng> coordinatesList;
     private Marker userMarker;
 
+    private boolean buttonClicked = false;
+
+    private View backDrop;
+    private boolean rotate = false;
+    private View lytPin, lytTrack;
+    private FloatingActionButton fabTrack; // Adicionado o FloatingActionButton para o botão Stop Tracking
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -83,9 +92,53 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 stopLocationUpdates();
+                stopTracking();
                 finish();
             }
         });
+
+        backDrop = findViewById(R.id.back);
+
+        final FloatingActionButton fabPin = findViewById(R.id.fab_pin);
+        fabTrack = findViewById(R.id.fab_track);
+        fabStopTracking = findViewById(R.id.fabStopTracking); // Referência ao FloatingActionButton do botão Stop Tracking
+        final FloatingActionButton fabAdd = findViewById(R.id.fab_add);
+
+        lytPin = findViewById(R.id.lyt_pin);
+        lytTrack = findViewById(R.id.lyt_track);
+
+        ViewAnimation.initShowOut(lytPin);
+        ViewAnimation.initShowOut(lytTrack);
+        backDrop.setVisibility(View.GONE);
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFabMode(v);
+            }
+        });
+
+        backDrop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFabMode(fabAdd);
+            }
+        });
+
+        fabPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Toast.makeText(MapActivity.this, "Setting Pin", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        fabTrack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startTracking();
+            }
+        });
+
     }
 
     @Override
@@ -103,30 +156,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         setupMarkers();
-
-        boolean buttonClicked = getIntent().getBooleanExtra("buttonClicked", false);
-
-        if (buttonClicked) {
-            fabStopTracking.show();
-            coordinatesList = new ArrayList<>(); // Inicializa a lista coordinatesList
-            setupPolyline();
-
-            if (checkLocationPermission()) {
-                startLocationUpdates();
-            } else {
-                requestLocationPermission();
-            }
-        } else {
-            Bundle bundle = getIntent().getExtras();
-            double latitude = bundle.getDouble("latitude");
-            double longitude = bundle.getDouble("longitude");
-            LatLng currentPosition = new LatLng(latitude, longitude);
-            MarkerOptions markerOptions = new MarkerOptions()
-                    .title("Você")
-                    .position(currentPosition);
-            map.addMarker(markerOptions);
-            map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 15));
-        }
+        Bundle bundle = getIntent().getExtras();
+        double latitude = bundle.getDouble("latitude");
+        double longitude = bundle.getDouble("longitude");
+        LatLng currentPosition = new LatLng(latitude, longitude);
+        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 15));
     }
 
     private void setupPolyline() {
@@ -286,6 +320,44 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             } else {
                 // Permission denied, handle accordingly
             }
+        }
+    }
+
+    private void startTracking() {
+        buttonClicked = true;
+        coordinatesList = new ArrayList<>(); // Inicializa a lista coordinatesList
+        setupPolyline();
+
+        if (checkLocationPermission()) {
+            startLocationUpdates();
+        } else {
+            requestLocationPermission();
+        }
+        Toast.makeText(MapActivity.this, "Tracking...", Toast.LENGTH_SHORT).show();
+        fabTrack.setVisibility(View.GONE); // Esconde o botão Start Tracking
+        fabStopTracking.setVisibility(View.VISIBLE); // Mostra o botão Stop Tracking
+        TextView textView = findViewById(R.id.text_track); // Referência ao TextView
+        textView.setText("Stop Tracking"); // Atualiza o texto para "Stop Tracking"
+    }
+
+    private void stopTracking() {
+        Toast.makeText(MapActivity.this, "Tracking stopped.", Toast.LENGTH_SHORT).show();
+        fabTrack.setVisibility(View.VISIBLE); // Mostra o botão Start Tracking
+        fabStopTracking.setVisibility(View.GONE); // Esconde o botão Stop Tracking
+        TextView textView = findViewById(R.id.text_track); // Referência ao TextView
+        textView.setText("Start Tracking"); // Atualiza o texto para "Start Tracking"
+    }
+
+    private void toggleFabMode(View v) {
+        rotate = ViewAnimation.rotateFab(v, !rotate);
+        if (rotate) {
+            ViewAnimation.showIn(lytPin);
+            ViewAnimation.showIn(lytTrack);
+            backDrop.setVisibility(View.VISIBLE);
+        } else {
+            ViewAnimation.showOut(lytTrack);
+            ViewAnimation.showOut(lytPin);
+            backDrop.setVisibility(View.GONE);
         }
     }
 }
