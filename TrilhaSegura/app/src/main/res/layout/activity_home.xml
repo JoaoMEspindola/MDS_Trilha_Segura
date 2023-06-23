@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:backgroundTint="@color/primary"
-    android:foregroundTint="@color/primary"
+    android:background="@drawable/bg_trilha"
     tools:context=".HomeActivity">
 
     <com.google.android.material.bottomappbar.BottomAppBar
@@ -28,13 +27,12 @@
 
     </com.google.android.material.bottomappbar.BottomAppBar>
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/fab"
+    <Button
+        android:id="@+id/inicializeMap"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:contentDescription="More options"
-        android:src="@drawable/baseline2_add_24"
-        app:layout_anchor="@id/bottomAppBar"
-        app:backgroundTint="@color/primary"/>
+        android:text="Inicializar Mapa"
+        android:layout_gravity="center|bottom"
+        android:layout_marginBottom="80dp"/>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

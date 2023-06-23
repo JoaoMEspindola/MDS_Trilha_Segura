@@ -66,4 +66,20 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/buttonPIN" />
 
+    <Button
+        android:id="@+id/buttonFdoase"
+        android:layout_width="match_parent"
+
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="24dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginRight="24dp"
+        app:backgroundTint = "@null"
+        android:background="@drawable/button_bg"
+        android:text="bibao"
+        android:textColor="#ffffff"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf= "@+id/buttonMap" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
