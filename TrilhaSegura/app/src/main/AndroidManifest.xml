@@ -17,7 +17,10 @@
         android:theme="@style/Theme.TrilhaSegura"
         tools:targetApi="31">
         <activity
-            android:name=".HomeActivity"
+            android:name=".searchPage"
+            android:exported="false" />
+        <activity
+            android:name=".LocationActivity"
             android:exported="false" />
         <activity
             android:name=".OptionActivity"
@@ -44,7 +47,7 @@
             android:name=".PinActivity"
             android:exported="false" />
         <activity
-            android:name=".LocationActivity"
+            android:name=".HomeActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

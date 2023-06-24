@@ -381,7 +381,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         databaseReference.push().setValue(pin);
                         addCustomMarker(latLng, type);
                     }
-                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_LEVEL);
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
                     addMarker(latLng);
                     map.animateCamera(cameraUpdate);
                 }
