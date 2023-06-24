@@ -40,6 +40,7 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
@@ -55,28 +56,35 @@ import java.util.Objects;
 public class MapActivity extends AppCompatActivity implements OnMapReadyCallback {
 
     private static final int LOCATION_PERMISSION_REQUEST_CODE = 1;
+    private boolean trackButtonClicked = false;
+    private boolean pinButtonClicked = false;
     private static final long LOCATION_UPDATE_INTERVAL = 5000; // 5 seconds
     private static final float DEFAULT_ZOOM_LEVEL = 15.0f;
 
     private GoogleMap map;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
+
     private LocationRequest locationRequest;
     private DatabaseReference databaseReference;
     private List<LatLng> coordinatesList;
     private Marker userMarker;
 
+    private Polyline polyline;
+
     private LinearLayout lytFabs;
     private boolean fabsVisible = false;
-    private boolean buttonClicked = false;
+
+    private PIN pin = new PIN();
     private boolean rotate = false;
     private View lytPin, lytTrack, backDrop;
-    private FloatingActionButton fabTrack, fabStopTracking, fabPin, fab2, fab3, fab4, fab5; // Adicionado o FloatingActionButton para o botão Stop Tracking
+    private FloatingActionButton fabTrack, fabStopTracking, fabPin, fabPista, fabAnimal, fabBuraco, fabMataburro; // Adicionado o FloatingActionButton para o botão Stop Tracking
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
 
         lytFabs = findViewById(R.id.lyt_fabs);
         fabPin = findViewById(R.id.fab_pin);
@@ -97,7 +105,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fabStopTracking.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                stopLocationUpdates();
                 stopTracking();
             }
         });
@@ -106,7 +113,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         final FloatingActionButton fabPin = findViewById(R.id.fab_pin);
         fabTrack = findViewById(R.id.fab_track);
-        fabStopTracking = findViewById(R.id.fabStopTracking); // Referência ao FloatingActionButton do botão Stop Tracking
         final FloatingActionButton fabAdd = findViewById(R.id.fab_add);
 
         lytPin = findViewById(R.id.lyt_pin);
@@ -116,10 +122,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ViewAnimation.initShowOut(lytTrack);
         backDrop.setVisibility(View.GONE);
 
-        fab2 = findViewById(R.id.fab2);
-        fab3 = findViewById(R.id.fab3);
-        fab4 = findViewById(R.id.fab4);
-        fab5 = findViewById(R.id.fab5);
+        fabPista = findViewById(R.id.fabPista);
+        fabMataburro = findViewById(R.id.fabMataBurro);
+        fabAnimal = findViewById(R.id.fabAnimal);
+        fabBuraco = findViewById(R.id.fabBuraco);
 
         fabPin.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -135,33 +141,41 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        fab2.setOnClickListener(new View.OnClickListener() {
+        fabPista.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideFabs();
+                pinButtonClicked = true;
+                startLocationUpdates("escorregadia");
             }
         });
 
-        fab3.setOnClickListener(new View.OnClickListener() {
+        fabMataburro.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideFabs();
+                pinButtonClicked = true;
+                startLocationUpdates("mataburro");
                 // Lógica para o clique do fab3
             }
         });
 
-        fab4.setOnClickListener(new View.OnClickListener() {
+        fabAnimal.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideFabs();
+                pinButtonClicked = true;
+                startLocationUpdates("animal");
                 // Lógica para o clique do fab4
             }
         });
 
-        fab5.setOnClickListener(new View.OnClickListener() {
+        fabBuraco.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 hideFabs();
+                pinButtonClicked = true;
+                startLocationUpdates("buraco");
                 // Lógica para o clique do fab5
             }
         });
@@ -192,9 +206,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         fabTrack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startTracking();
+                trackButtonClicked = !trackButtonClicked;
+                if(trackButtonClicked){
+                    startTracking();
+                }else{
+                    stopTracking();
+                }
             }
         });
+
+        if (checkLocationPermission()) {
+            startLocationUpdates("");
+        } else {
+            requestLocationPermission();
+        }
 
     }
 
@@ -213,27 +238,34 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         setupMarkers();
-        Bundle bundle = getIntent().getExtras();
-        double latitude = bundle.getDouble("latitude");
-        double longitude = bundle.getDouble("longitude");
-        LatLng currentPosition = new LatLng(latitude, longitude);
-        map.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 15));
+
     }
 
+    private void clearPolyline() {
+        if (polyline != null) {
+            polyline.remove(); // Remove a polyline do mapa
+        }
+    }
+
+    // Método para configurar a polyline inicial no mapa
     private void setupPolyline() {
         PolylineOptions polylineOptions = new PolylineOptions()
                 .color(Color.RED)
                 .width(5);
-        map.addPolyline(polylineOptions);
+        polyline = map.addPolyline(polylineOptions); // Salva a referência da polyline
     }
 
+    // Método para atualizar a polyline no mapa
     private void updatePolyline(LatLng latLng) {
         PolylineOptions polylineOptions = new PolylineOptions()
                 .color(Color.RED)
                 .width(5)
                 .addAll(coordinatesList);
-        map.addPolyline(polylineOptions);
-        addMarker(latLng);
+
+        clearPolyline(); // Limpa a polyline atual
+
+        polyline = map.addPolyline(polylineOptions); // Adiciona a nova polyline ao mapa
+
         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLng(latLng);
         map.animateCamera(cameraUpdate); // Faz a câmera acompanhar a posição do usuário
     }
@@ -305,6 +337,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .position(latLng)
                 .icon(setIcon(MapActivity.this, drawableId));
         map.addMarker(markerOptions);
+
+        pinButtonClicked = false;
     }
 
     private BitmapDescriptor setIcon(MapActivity context, int drawableId) {
@@ -316,7 +350,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         return BitmapDescriptorFactory.fromBitmap(bitmap);
     }
 
-    private void startLocationUpdates() {
+    private void startLocationUpdates(String type) {
         locationRequest = new LocationRequest.Builder(LOCATION_UPDATE_INTERVAL)
                 .setGranularity(Granularity.GRANULARITY_FINE)
                 .setPriority(Priority.PRIORITY_HIGH_ACCURACY)
@@ -331,14 +365,25 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 }
                 for (Location location : locationResult.getLocations()) {
                     LatLng latLng = new LatLng(location.getLatitude(), location.getLongitude());
-                    coordinatesList.add(latLng); // Adiciona a coordenada na lista
-                    updatePolyline(latLng);
-                    databaseReference.push().setValue(location);
+                    if(trackButtonClicked){
+                        coordinatesList.add(latLng); // Adiciona a coordenada na lista
+                        updatePolyline(latLng);
 
-                    if (coordinatesList.size() == 1) {
+                        if (coordinatesList.size() == 1) {
                         CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_LEVEL);
                         map.animateCamera(cameraUpdate);
+                        }
                     }
+                    if(pinButtonClicked){
+                        pin.setType(type);
+                        pin.setLatitude(latLng.latitude);
+                        pin.setLongitude(latLng.longitude);
+                        databaseReference.push().setValue(pin);
+                        addCustomMarker(latLng, type);
+                    }
+                    CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, DEFAULT_ZOOM_LEVEL);
+                    addMarker(latLng);
+                    map.animateCamera(cameraUpdate);
                 }
             }
         };
@@ -368,25 +413,24 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, LOCATION_PERMISSION_REQUEST_CODE);
     }
 
-    @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                startLocationUpdates();
-            } else {
-                // Permission denied, handle accordingly
-            }
-        }
-    }
+//    @Override
+//    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+//        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+//        if (requestCode == LOCATION_PERMISSION_REQUEST_CODE) {
+//            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+//                startLocationUpdates();
+//            } else {
+//                // Permission denied, handle accordingly
+//            }
+//        }
+//    }
 
     private void startTracking() {
-        buttonClicked = true;
         coordinatesList = new ArrayList<>(); // Inicializa a lista coordinatesList
         setupPolyline();
 
         if (checkLocationPermission()) {
-            startLocationUpdates();
+            startLocationUpdates("");
         } else {
             requestLocationPermission();
         }
@@ -398,6 +442,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void stopTracking() {
+        trackButtonClicked = false;
+        stopLocationUpdates();
+        clearPolyline();
+        coordinatesList.clear();
         Toast.makeText(MapActivity.this, "Tracking stopped.", Toast.LENGTH_SHORT).show();
         fabTrack.setVisibility(View.VISIBLE); // Mostra o botão Start Tracking
         fabStopTracking.setVisibility(View.GONE); // Esconde o botão Stop Tracking
@@ -462,4 +510,5 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
 
         fabsVisible = false;
     }
+
 }

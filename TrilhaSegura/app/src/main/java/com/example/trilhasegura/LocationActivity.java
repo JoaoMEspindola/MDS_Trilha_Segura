@@ -90,20 +90,8 @@ public class LocationActivity extends AppCompatActivity {
         binding.buttonMap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (hasLocationPermissions()) {
-                    getLastLocation("Map");
-                } else {
-                    if (shouldShowRequestPermissionRationale(Manifest.permission.ACCESS_FINE_LOCATION)) {
-                        showCustomDialog("Location Permission", "This app needs the location permission to track your location.", "Ok.", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                multiplePermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
-                            }
-                        }, "Cancel", null);
-                    } else {
-                        multiplePermissionLauncher.launch(new String[]{Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION});
-                    }
-                }
+                Intent intent = new Intent(LocationActivity.this, MapActivity.class);
+                startActivity(intent);
             }
         });
         binding.buttonTracking.setOnClickListener(new View.OnClickListener() {

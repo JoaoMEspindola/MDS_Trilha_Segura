@@ -93,7 +93,7 @@
             android:visibility="gone">
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab2"
+                android:id="@+id/fabPista"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -109,7 +109,7 @@
                 android:backgroundTint="@color/primary" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab3"
+                android:id="@+id/fabMataBurro"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -125,7 +125,7 @@
                 android:backgroundTint="@color/primary" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab4"
+                android:id="@+id/fabAnimal"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
@@ -141,7 +141,7 @@
                 android:backgroundTint="@color/primary" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
-                android:id="@+id/fab5"
+                android:id="@+id/fabBuraco"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
