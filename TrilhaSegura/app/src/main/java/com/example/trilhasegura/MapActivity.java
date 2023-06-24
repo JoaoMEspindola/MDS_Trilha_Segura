@@ -1,6 +1,8 @@
 package com.example.trilhasegura;
 
 import android.Manifest;
+import android.animation.Animator;
+import android.animation.AnimatorListenerAdapter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,6 +12,8 @@ import android.location.Location;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewAnimationUtils;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -55,7 +59,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private static final float DEFAULT_ZOOM_LEVEL = 15.0f;
 
     private GoogleMap map;
-    private FloatingActionButton fabStopTracking;
     private FusedLocationProviderClient fusedLocationClient;
     private LocationCallback locationCallback;
     private LocationRequest locationRequest;
@@ -63,17 +66,20 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private List<LatLng> coordinatesList;
     private Marker userMarker;
 
+    private LinearLayout lytFabs;
+    private boolean fabsVisible = false;
     private boolean buttonClicked = false;
-
-    private View backDrop;
     private boolean rotate = false;
-    private View lytPin, lytTrack;
-    private FloatingActionButton fabTrack; // Adicionado o FloatingActionButton para o botão Stop Tracking
+    private View lytPin, lytTrack, backDrop;
+    private FloatingActionButton fabTrack, fabStopTracking, fabPin, fab2, fab3, fab4, fab5; // Adicionado o FloatingActionButton para o botão Stop Tracking
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
+
+        lytFabs = findViewById(R.id.lyt_fabs);
+        fabPin = findViewById(R.id.fab_pin);
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -110,10 +116,61 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         ViewAnimation.initShowOut(lytTrack);
         backDrop.setVisibility(View.GONE);
 
+        fab2 = findViewById(R.id.fab2);
+        fab3 = findViewById(R.id.fab3);
+        fab4 = findViewById(R.id.fab4);
+        fab5 = findViewById(R.id.fab5);
+
+        fabPin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                toggleFabs();
+            }
+        });
+
+        fabAdd.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideFabs();
+            }
+        });
+
+        fab2.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideFabs();
+            }
+        });
+
+        fab3.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideFabs();
+                // Lógica para o clique do fab3
+            }
+        });
+
+        fab4.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideFabs();
+                // Lógica para o clique do fab4
+            }
+        });
+
+        fab5.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                hideFabs();
+                // Lógica para o clique do fab5
+            }
+        });
+
         fabAdd.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 toggleFabMode(v);
+                hideFabs();
             }
         });
 
@@ -128,6 +185,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             @Override
             public void onClick(View v) {
                 Toast.makeText(MapActivity.this, "Setting Pin", Toast.LENGTH_SHORT).show();
+                toggleFabs();
             }
         });
 
@@ -358,5 +416,50 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             ViewAnimation.showOut(lytPin);
             backDrop.setVisibility(View.GONE);
         }
+    }
+
+    private void toggleFabs() {
+        if (fabsVisible) {
+            hideFabs();
+        } else {
+            showFabs();
+        }
+    }
+
+    private void showFabs() {
+        // Mostrar os FloatingActionButton com animação circular
+        int cx = lytFabs.getWidth() / 2;
+        int cy = lytFabs.getHeight() / 2;
+        float radius = (float) Math.hypot(cx, cy);
+
+        Animator revealAnimator = ViewAnimationUtils.createCircularReveal(lytFabs, cx, cy, 0, radius);
+        revealAnimator.setDuration(500);
+        lytFabs.setVisibility(View.VISIBLE);
+        revealAnimator.start();
+
+        fabPin.setVisibility(View.GONE);
+        lytPin.setVisibility(View.GONE);
+        fabsVisible = true;
+    }
+
+    private void hideFabs() {
+        // Esconder os FloatingActionButton com animação circular
+        int cx = lytFabs.getWidth() / 2;
+        int cy = lytFabs.getHeight() / 2;
+        float radius = (float) Math.hypot(cx, cy);
+
+        Animator hideAnimator = ViewAnimationUtils.createCircularReveal(lytFabs, cx, cy, radius, 0);
+        hideAnimator.setDuration(500);
+        hideAnimator.addListener(new AnimatorListenerAdapter() {
+            @Override
+            public void onAnimationEnd(Animator animation) {
+                lytFabs.setVisibility(View.GONE);
+                fabPin.setVisibility(View.VISIBLE);
+                lytPin.setVisibility(View.VISIBLE);
+            }
+        });
+        hideAnimator.start();
+
+        fabsVisible = false;
     }
 }
