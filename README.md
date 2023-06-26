@@ -1,6 +1,6 @@
 # Trilha Segura - MVP
 
-O objetivo final do aplicativo Trilha Segura será se apresentar como forma de proporcionar mais conforto e segurança aos seus usuários, tendo como principal ponto positivo, os sistemas apoio e de pins. Seu sistema de apoio possui dois diferentes alarmes que podem ser acionados pelo ciclista, um de apoio médico, e outro de apoio mecânico. Já para o sistema de pins, imaginou-se proporcionar a mesma experiência que um motorista atrasado tem, ao acessar o Waze e decidir, a partir daí, qual será a melhor rota a se seguir zeu caminho.
+O objetivo final do aplicativo Trilha Segura será se apresentar como forma de proporcionar mais conforto e segurança aos seus usuários, tendo como principal ponto positivo, os sistemas apoio e de pins. Seu sistema de apoio possui dois diferentes alarmes que podem ser acionados pelo ciclista, um de apoio médico, e outro de apoio mecânico. Já para o sistema de pins, imaginou-se proporcionar a mesma experiência que um motorista atrasado tem, ao acessar o Waze e decidir, a partir daí, qual será a melhor rota a se seguir seu caminho.
 
 ## Funcionalidades
 
