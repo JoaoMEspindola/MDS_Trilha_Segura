@@ -1,8 +1,11 @@
 package com.example.trilhasegura;
 
+import static android.content.ContentValues.TAG;
+
 import android.Manifest;
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
+import android.content.DialogInterface;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
@@ -10,6 +13,7 @@ import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewAnimationUtils;
@@ -20,6 +24,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.ActivityCompat;
 
@@ -42,6 +47,8 @@ import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.Polyline;
 import com.google.android.gms.maps.model.PolylineOptions;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -66,7 +73,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private LocationCallback locationCallback;
 
     private LocationRequest locationRequest;
-    private DatabaseReference databaseReference;
+    private DatabaseReference databaseReference, trailReference;
     private List<LatLng> coordinatesList;
     private Marker userMarker;
 
@@ -98,6 +105,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this);
+        trailReference = FirebaseDatabase.getInstance().getReference().child("Trails");
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Location");
 
         fabStopTracking = findViewById(R.id.fabStopTracking);
@@ -292,7 +300,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 double latitude = dataSnapshot.child("latitude").getValue(Double.class);
                 String tipo = dataSnapshot.child("type").getValue(String.class);
                 LatLng latLng = new LatLng(latitude, longitude);
-                addCustomMarker(latLng, tipo);
+                addCustomMarker(latLng, tipo, databaseReference.push().getKey());
             }
 
             @Override
@@ -319,7 +327,8 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         });
     }
 
-    private void addCustomMarker(LatLng latLng, String tipo) {
+    private void addCustomMarker(final LatLng latLng, final String tipo, String ID) {
+        DatabaseReference markerReference = FirebaseDatabase.getInstance().getReference().child("Location");
         int drawableId;
         if (Objects.equals(tipo, "animal")) {
             drawableId = R.drawable.animal_semfundo;
@@ -330,16 +339,48 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         } else if (Objects.equals(tipo, "escorregadia")) {
             drawableId = R.drawable.escorregadia_semfundo;
         } else {
-            return; // Invalid tipo, ignore marker
+            return; // Tipo inválido, ignorar marcador
         }
 
-        MarkerOptions markerOptions = new MarkerOptions()
+        final MarkerOptions markerOptions = new MarkerOptions()
                 .position(latLng)
-                .icon(setIcon(MapActivity.this, drawableId));
-        map.addMarker(markerOptions);
+                .icon(setIcon(MapActivity.this, drawableId))
+                .snippet(ID);
+        final Marker marker = map.addMarker(markerOptions);
+
+        // Adicione um ouvinte de clique para cada marcador
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(final Marker clickedMarker) {
+                // Verifique se o marcador clicado é igual ao marcador atual
+                if (marker.equals(clickedMarker)) {
+                    // Exibe um diálogo de confirmação
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
+                    builder.setTitle("Remover marcador");
+                    builder.setMessage("Deseja remover este marcador?");
+                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            // Remove o marcador do mapa
+                            clickedMarker.remove();
+                            markerReference.child(ID).removeValue();
+                        }
+                    });
+                    builder.setNegativeButton("Não", null);
+                    builder.show();
+
+                    // Retorna 'true' para indicar que o clique no marcador foi tratado
+                    return true;
+                }
+
+                // Retorna 'false' para indicar que o clique no marcador não foi tratado
+                return false;
+            }
+        });
 
         pinButtonClicked = false;
     }
+
 
     private BitmapDescriptor setIcon(MapActivity context, int drawableId) {
         Drawable drawable = ActivityCompat.getDrawable(context, drawableId);
@@ -378,8 +419,11 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         pin.setType(type);
                         pin.setLatitude(latLng.latitude);
                         pin.setLongitude(latLng.longitude);
-                        databaseReference.push().setValue(pin);
-                        addCustomMarker(latLng, type);
+                        DatabaseReference newPinRef = databaseReference.push();
+                        String newPinKey = newPinRef.getKey(); // Obter a chave gerada
+
+                        newPinRef.setValue(pin);
+                        addCustomMarker(latLng, type, newPinKey);
                     }
                     CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(latLng, 18);
                     addMarker(latLng);
@@ -445,6 +489,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         trackButtonClicked = false;
         stopLocationUpdates();
         clearPolyline();
+        trailReference.push().setValue(coordinatesList);
         coordinatesList.clear();
         Toast.makeText(MapActivity.this, "Tracking stopped.", Toast.LENGTH_SHORT).show();
         fabTrack.setVisibility(View.VISIBLE); // Mostra o botão Start Tracking

@@ -20,9 +20,6 @@
             android:name=".searchPage"
             android:exported="false" />
         <activity
-            android:name=".LocationActivity"
-            android:exported="false" />
-        <activity
             android:name=".OptionActivity"
             android:exported="false" />
         <activity
@@ -43,9 +40,6 @@
             android:name="com.google.android.geo.API_KEY"
             android:value="${MAPS_API_KEY}" />
 
-        <activity
-            android:name=".PinActivity"
-            android:exported="false" />
         <activity
             android:name=".HomeActivity"
             android:exported="true">
