@@ -40,7 +40,7 @@ public class HomeActivity extends AppCompatActivity {
                     // Lógica para lidar com a seleção do Item 1
                     return true;
                 } else if (item.getItemId() == R.id.search) {
-                    // Lógica para lidar com a seleção do Item 2
+                    startActivity(new Intent(HomeActivity.this, searchPage.class));
                     return true;
                 } else if (item.getItemId() == R.id.person) {
                     // Lógica para lidar com a seleção do Item 3

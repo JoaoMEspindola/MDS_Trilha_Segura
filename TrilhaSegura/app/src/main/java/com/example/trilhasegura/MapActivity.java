@@ -77,6 +77,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     private List<LatLng> coordinatesList;
     private Marker userMarker;
 
+    private List<Marker> markerList;
     private Polyline polyline;
 
     private LinearLayout lytFabs;
@@ -92,6 +93,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_map);
 
+        markerList = new ArrayList<>();
 
         lytFabs = findViewById(R.id.lyt_fabs);
         fabPin = findViewById(R.id.fab_pin);
@@ -300,7 +302,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 double latitude = dataSnapshot.child("latitude").getValue(Double.class);
                 String tipo = dataSnapshot.child("type").getValue(String.class);
                 LatLng latLng = new LatLng(latitude, longitude);
-                addCustomMarker(latLng, tipo, databaseReference.push().getKey());
+                addCustomMarker(latLng, tipo, dataSnapshot.getKey());
             }
 
             @Override
@@ -328,7 +330,6 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     }
 
     private void addCustomMarker(final LatLng latLng, final String tipo, String ID) {
-        DatabaseReference markerReference = FirebaseDatabase.getInstance().getReference().child("Location");
         int drawableId;
         if (Objects.equals(tipo, "animal")) {
             drawableId = R.drawable.animal_semfundo;
@@ -347,38 +348,44 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                 .icon(setIcon(MapActivity.this, drawableId))
                 .snippet(ID);
         final Marker marker = map.addMarker(markerOptions);
+        markerList.add(marker);
 
-        // Adicione um ouvinte de clique para cada marcador
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
-            public boolean onMarkerClick(final Marker clickedMarker) {
-                // Verifique se o marcador clicado é igual ao marcador atual
-                if (marker.equals(clickedMarker)) {
+            public boolean onMarkerClick(Marker clickedMarker) {
+                // Verifica se o marcador clicado está presente na lista
+                if (markerList.contains(clickedMarker)) {
                     // Exibe um diálogo de confirmação
-                    AlertDialog.Builder builder = new AlertDialog.Builder(MapActivity.this);
-                    builder.setTitle("Remover marcador");
-                    builder.setMessage("Deseja remover este marcador?");
-                    builder.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                            // Remove o marcador do mapa
-                            clickedMarker.remove();
-                            markerReference.child(ID).removeValue();
-                        }
-                    });
-                    builder.setNegativeButton("Não", null);
-                    builder.show();
-
-                    // Retorna 'true' para indicar que o clique no marcador foi tratado
+                    showDialog(clickedMarker, ID);
                     return true;
                 }
-
-                // Retorna 'false' para indicar que o clique no marcador não foi tratado
                 return false;
             }
         });
-
         pinButtonClicked = false;
+    }
+
+    private void showDialog(final Marker marker, final String ID) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Deseja remover este marcador?")
+                .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Remove o marcador do mapa
+                        marker.remove();
+                        markerList.remove(marker);
+
+                        // Remove o marcador do Firebase
+                        databaseReference.child(ID).removeValue();
+
+                        Toast.makeText(MapActivity.this, "Marcador removido!", Toast.LENGTH_SHORT).show();
+                    }
+                })
+                .setNegativeButton("Não", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int id) {
+                        // Nada a fazer, apenas fecha o diálogo
+                    }
+                });
+        builder.create().show();
     }
 
 
