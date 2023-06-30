@@ -55,6 +55,8 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -225,12 +227,64 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
             }
         });
 
-        if (checkLocationPermission()) {
-            startLocationUpdates("");
-        } else {
-            requestLocationPermission();
-        }
+        if (getIntent().getStringExtra("KEY") != null){
+            List<LatLng> listaCoord = new ArrayList<>();
 
+            trailReference.addChildEventListener(new ChildEventListener() {
+                @Override
+                public void onChildAdded(@NonNull DataSnapshot dataSnapshot, String previousChildName) {
+                    Log.d("CACETE", getIntent().getStringExtra("KEY"));
+                    if (Objects.equals(dataSnapshot.getKey(), getIntent().getStringExtra("KEY"))){
+                        for (DataSnapshot childSnapshot : dataSnapshot.getChildren()) {
+                            double longitude = childSnapshot.child("longitude").getValue(Double.class);
+                            double latitude = childSnapshot.child("latitude").getValue(Double.class);
+                            LatLng latLng = new LatLng(latitude, longitude);
+                            listaCoord.add(latLng);
+                        }
+                        Log.d("CUIUIU", listaCoord.toString());
+                        PolylineOptions polylineOptions = new PolylineOptions()
+                                .color(Color.RED)
+                                .width(5)
+                                .addAll(listaCoord);
+
+                        CameraUpdate cameraUpdate = CameraUpdateFactory.newLatLngZoom(listaCoord.get(0), 18);
+                        map.animateCamera(cameraUpdate);
+                        map.addMarker(new MarkerOptions().title("Ponto inicial").position(listaCoord.get(0))).showInfoWindow();
+                        map.addPolyline(polylineOptions); // Adiciona a nova polyline ao mapa
+                    }
+                }
+
+                @Override
+                public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                }
+
+                @Override
+                public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+                }
+
+                @Override
+                public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+
+                }
+
+                // Resto dos métodos ChildEventListener
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    // Handle database read errors, if needed
+                }
+            });
+
+        }else {
+
+            if (checkLocationPermission()) {
+                startLocationUpdates("");
+            } else {
+                requestLocationPermission();
+            }
+        }
     }
 
     @Override
@@ -248,6 +302,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
     public void onMapReady(@NonNull GoogleMap googleMap) {
         map = googleMap;
         setupMarkers();
+
 
         map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
@@ -494,9 +549,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         stopLocationUpdates();
         clearPolyline();
 
-        Item item = new Item(trailReference.push().getKey(), coordinatesList);
-
-        trailReference.push().setValue(item);
+        trailReference.push().setValue(coordinatesList);
         coordinatesList.clear();
         Toast.makeText(MapActivity.this, "Tracking stopped.", Toast.LENGTH_SHORT).show();
         fabTrack.setVisibility(View.VISIBLE); // Mostra o botão Start Tracking

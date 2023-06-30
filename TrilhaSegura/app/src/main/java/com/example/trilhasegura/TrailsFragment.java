@@ -1,5 +1,6 @@
 package com.example.trilhasegura;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -8,6 +9,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.os.Parcelable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -30,7 +33,7 @@ import java.util.Objects;
  * Use the {@link TrailsFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class TrailsFragment extends Fragment {
+public class TrailsFragment extends Fragment implements RecyclerViewInterface{
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -92,7 +95,7 @@ public class TrailsFragment extends Fragment {
 
 
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(new MyAdapter(requireActivity().getApplicationContext(), items));
+        recyclerView.setAdapter(new MyAdapter(requireActivity().getApplicationContext(), items, this));
         // Inflate the layout for this fragment
         return view;
     }
@@ -104,10 +107,8 @@ public class TrailsFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
 
-                    GenericTypeIndicator<List<LatLng>> listCoordinates = new GenericTypeIndicator<List<LatLng>>() {};
-                    List<LatLng> coordinatesList = snapshot.child("coordinatesList").getValue(listCoordinates);
                     String key = dataSnapshot.getKey();
-                    Item item = new Item(key, coordinatesList);
+                    Item item = new Item(key);
                     items.add(item);
                 }
                 recyclerView.getAdapter().notifyDataSetChanged();
@@ -118,5 +119,12 @@ public class TrailsFragment extends Fragment {
 
             }
         });
+    }
+
+    @Override
+    public void onItemClick(int position) {
+        Intent intent = new Intent(getActivity(), MapActivity.class);
+        intent.putExtra("KEY", items.get(position).getKey());
+        startActivity(intent);
     }
 }

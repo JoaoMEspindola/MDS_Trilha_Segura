@@ -8,7 +8,6 @@ import java.util.List;
 public class Item {
 
     String key;
-    List<LatLng> coordinatesList;
 
     public String getKey() {
         return key;
@@ -18,16 +17,8 @@ public class Item {
         this.key = key;
     }
 
-    public List<LatLng> getCoordinatesList() {
-        return coordinatesList;
-    }
 
-    public void setCoordinatesList(List<LatLng> coordinatesList) {
-        this.coordinatesList = coordinatesList;
-    }
-
-    public Item(String key, List<LatLng> coordinatesList) {
+    public Item(String key) {
         this.key = key;
-        this.coordinatesList = coordinatesList;
     }
 }

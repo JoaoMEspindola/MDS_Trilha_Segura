@@ -12,9 +12,22 @@ public class MyViewHolder extends RecyclerView.ViewHolder {
     TextView keyView;
 
 
-    public MyViewHolder(@NonNull View itemView) {
+    public MyViewHolder(@NonNull View itemView, RecyclerViewInterface recyclerViewInterface) {
         super(itemView);
         keyView = itemView.findViewById(R.id.key);
+
+        itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (recyclerViewInterface != null){
+                    int position = getAbsoluteAdapterPosition();
+
+                    if (position != RecyclerView.NO_POSITION){
+                        recyclerViewInterface.onItemClick(position);
+                    }
+                }
+            }
+        });
 
     }
 }
