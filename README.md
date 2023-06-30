@@ -1,56 +1,80 @@
-# Trilha Segura - MVP
+# Trilha Segura
 
-O objetivo final do aplicativo Trilha Segura será se apresentar como forma de proporcionar mais conforto e segurança aos seus usuários, tendo como principal ponto positivo, os sistemas apoio e de pins. Seu sistema de apoio possui dois diferentes alarmes que podem ser acionados pelo ciclista, um de apoio médico, e outro de apoio mecânico. Já para o sistema de pins, imaginou-se proporcionar a mesma experiência que um motorista atrasado tem, ao acessar o Waze e decidir, a partir daí, qual será a melhor rota a se seguir seu caminho.
+O objetivo final do aplicativo Trilha Segura é proporcionar mais conforto e segurança aos seus usuários, com destaque para seus sistemas de apoio e pins. O sistema de apoio conta com dois alarmes distintos, um para assistência médica e outro para assistência mecânica. Já o sistema de pins tem como propósito oferecer aos usuários uma experiência similar àquela de um motorista ao utilizar o Waze, permitindo que eles decidam a melhor rota a seguir durante seu percurso.
 
-## Funcionalidades
+## Participantes do Projeto
 
-O objetivo deste MVP (Minimum Viable Product) é fornecer funcionalidades básicas para testar e validar o conceito do aplicativo. Possuindo assim as seguintes funcionalidades:
+Esse projeto foi desenvolvido por alunos de Engenharia de Computação do CEFET-MG como parte da disciplina de Modelagem e Desenvolvimento de Software. A equipe é composta pelos seguintes membros:
 
-1. **Set Pin:** Ao clicar no botão "Set Pin", o usuário pode adicionar um marcador (PIN) em uma posição específica do mapa (a que ele está no momento, como pode ser vista na Imagem 1). Isso permite que os usuários marquem locais de interesse ou pontos de referência relevantes para futuras referências. Neste MVP o aplicativo possui um conjunto inicial de eventos que podem ser sinalizados ao longo da trilha (Imagem 2). Sendo as seguintes opções: Pista Escorregadia, Buraco, Mata-Burro e Animal na Trilha. Esses eventos servem para demonstrar a capacidade do aplicativo de sinalizar pontos de interesse e possíveis obstáculos ao longo do caminho, demonstrando. Ao finalizar o PIN estará disponível no mapa como é possível ver na Imagem 3.
+* Henrique Souza Fagundes
+* João Pedro Martins Espíndola
+* Pedro Pinheiro de Siqueira
+
+## Funcionalidade
+
+Devido às limitações de tempo e escopo do projeto, o grupo optou por priorizar o desenvolvimento das funcionalidades de tracking e marcação de pins no aplicativo Trilha Segura. Essas funcionalidades foram selecionadas estrategicamente como elementos-chave para diferenciar o aplicativo de outras soluções existentes. A capacidade de rastrear a localização e marcar pins no mapa proporciona uma experiência única aos usuários, permitindo-lhes explorar e compartilhar informações relevantes sobre trilhas e rotas seguras.
+
+Além disso, foi realizado o processo de integração com um banco de dados, possibilitando que os pins marcados por outros usuários sejam visualizados por qualquer pessoa que utilize o aplicativo.
+
+### Tela Inicial
+
+Ao iniciar o aplicativo Trilha Segura, os usuários são apresentados a uma interface intuitiva e amigável. O layout inclui diferentes botões, cada um com sua funcionalidade específica. Nesta versão inicial do aplicativo, o botão de inicializar o mapa é a única opção implementada e disponível para uso.
 
 <p align="center">
-  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/a0400c27-bb52-4187-b3c3-95801b151174" alt="Tela Inicial" height="450px">
+  <img src="imgs/tela_inicial.jpg" alt="Tela Inicial" height="450px">
+</p>
+
+### Mapa
+
+O mapa reconhecerá automaticamente a localização do usuário, exibindo sua posição atual e destacando os PINs próximos a ele, permitindo que o usuário reconheça o ambiente que está próximo mesmo sem realizar qualquer ação. Isso proporciona uma visão imediata das informações relevantes para a trilha em que está.
+
+<p align="center">
+  <img src="imgs/mapa.jpg" alt="Aplicativo ao iniciar o mapa" height="450px">
+</p>
+
+Além dos PINs já presentes no mapa, os usuários também terão acesso a um botão adicional com o símbolo de '+' localizado no canto inferior direito do mapa. Ao tocar nesse botão, uma nova interação será ativada, permitindo que o usuário marque um novo PIN ou comece a rastrear o caminho que o usuário começará a percorrer.
+
+<p align="center">
+  <img src="imgs/opcoes.jpg" alt="Opções no mapa" height="450px">
+</p>
+
+#### Set Pin
+
+Ao clicar no botão "Set Pin", o usuário pode adicionar um marcador (PIN) em uma posição específica do mapa (a que ele está). Isso permite que os usuários marquem locais de interesse ou pontos de referência relevantes para futuras referências. Neste momento existem as seguintes opções de PIN: Pista Escorregadia, Buraco, Mata-Burro e Animal na Trilha. Esses eventos servem para demonstrar a capacidade do aplicativo de sinalizar pontos de interesse e possíveis obstáculos ao longo do caminho, como estes PINs são fáceis de serem adicionados, não havia razão para começar a adicionar uma grande variedade neste nível do aplicativo.
+
+<p align="center">
+  <img src="imgs/setando_pin.jpg" alt="Opções de pin" height="450px">
 </p>
 
 <p align="center">
-  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/e2d5b231-5ace-4f2f-874b-08e91a7a37f7" alt="Tela de Setar PIN" height="450px">
+  <img src="imgs/mostrando_pins.jpg" alt="Mostrando pins" height="450px">
+</p>
+
+#### Start Tracking
+
+Ao clicar no botão "Start Tracking", o aplicativo registra o caminho percorrido pelo usuário em tempo real. Isso permite que os usuários gravem suas trilhas, importante para que revisitem-nas posteriormente ou as compartilhem com amigos. Como é possível ver pela imagem, ao iniciar o tracking, um pequeno botão de stop aparecerá no canto direito inferior da tela permitindo que termine de se marcar a rota atual.
+
+<p align="center">
+  <img src="imgs/rota.jpg" alt="Tela Inicial" height="450px">
 </p>
 
 <p align="center">
-  <img src="https://github-production-user-asset-6210df.s3.amazonaws.com/49202702/244843313-ff0ba8a9-a74f-4066-8d63-27e05e5f2425.jpg" alt="Tela Inicial com PIN setado" height="450px">
-</p>
-
-2. **Start Tracking:** Ao clicar no botão "Start Tracking", o aplicativo registra o caminho percorrido pelo usuário em tempo real (Imagem 4). Isso permite que os usuários gravem suas trilhas, importante para que revisitem-nas posteriormente ou as compartilhem com amigos. Como é possível ver pela imagem, ao iniciar o tracking, um pequeno botão de stop aparecerá no canto direito inferior da tela permitindo que termine de se marcar a rota atual.
-
-<p align="center">
-  <img src="https://github.com/JoaoMEspindola/MDS_Trilha_Segura/assets/49202702/fbfe6d18-7b6b-406d-aa88-038a96da903c" alt="Tela com Rota sendo traçada" height="450px">
+  <img src="imgs/tracking.jpg" alt="Tela Inicial" height="450px">
 </p>
 
 ## Tecnologias Utilizadas
 
 O Trilha Segura foi desenvolvido utilizando as seguintes tecnologias e ferramentas:
 
-- Android Studio: Ambiente de desenvolvimento integrado (IDE) utilizado para criar o aplicativo Android.
+- Linguagem de Programação Java: Todo o aplicativo foi feito utilizando-se da linguagem Java.
 - API do Google Maps: Utilizada para exibir e interagir com os mapas no aplicativo. Para utilizar a API, foi necessário o cadastro de uma chave de API no Console de Desenvolvedor do Google.
+- Banco de dados Firebase: Todos os PINs e rotas estão sendo salvas no banco de dados Firebase.
+- Android Studio: Ambiente de desenvolvimento integrado (IDE) utilizado para criar o aplicativo Android.
 
 ## Instalação e Execução
 
 1. Clone este repositório em sua máquina local.
 
-2. Abra o projeto no Android Studio.
+2. Abra o projeto no Android Studio ou em sua IDE de preferência.
 
 3. Compile e execute o aplicativo em um dispositivo Android ou em um emulador.
-
-## Próximos Passos
-
-Este MVP do Trilha Segura fornece uma base para futuras iterações e melhorias. Alguns próximos passos para a evolução do aplicativo podem incluir:
-
-- Integrar o aplicativo com um banco de dados para que todos possam ver as rotas e PINs dos outros.
-- Expandir o conjunto de PINs.
-- Adicionar recursos de pesquisa e navegação em trilhas existentes.
-- Permitir a exclusão de PINs existentes que podem ser temporários.
-
-## Funcionamento do Aplicativo
-
-<p>No link abaixo, será possível ver um breve funcionamento das funções anteriormente listadas. Gravação feita diretamente do emulador do AndroidStudio.</p>
-<a href="https://youtu.be/QQBdJ5aXxvM">Vídeo do funcionamento.</a>
