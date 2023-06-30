@@ -249,6 +249,14 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         map = googleMap;
         setupMarkers();
 
+        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
+            @Override
+            public boolean onMarkerClick(Marker clickedMarker) {
+                showDialog(clickedMarker);
+                return true;
+            }
+        });
+
     }
 
     private void clearPolyline() {
@@ -350,22 +358,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         final Marker marker = map.addMarker(markerOptions);
         markerList.add(marker);
 
-        map.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
-            @Override
-            public boolean onMarkerClick(Marker clickedMarker) {
-                // Verifica se o marcador clicado está presente na lista
-                if (markerList.contains(clickedMarker)) {
-                    // Exibe um diálogo de confirmação
-                    showDialog(clickedMarker, ID);
-                    return true;
-                }
-                return false;
-            }
-        });
         pinButtonClicked = false;
     }
 
-    private void showDialog(final Marker marker, final String ID) {
+    private void showDialog(final Marker marker) {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage("Deseja remover este marcador?")
                 .setPositiveButton("Sim", new DialogInterface.OnClickListener() {
@@ -375,6 +371,7 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
                         markerList.remove(marker);
 
                         // Remove o marcador do Firebase
+                        String ID = marker.getSnippet();
                         databaseReference.child(ID).removeValue();
 
                         Toast.makeText(MapActivity.this, "Marcador removido!", Toast.LENGTH_SHORT).show();
@@ -496,7 +493,10 @@ public class MapActivity extends AppCompatActivity implements OnMapReadyCallback
         trackButtonClicked = false;
         stopLocationUpdates();
         clearPolyline();
-        trailReference.push().setValue(coordinatesList);
+
+        Item item = new Item(trailReference.push().getKey(), coordinatesList);
+
+        trailReference.push().setValue(item);
         coordinatesList.clear();
         Toast.makeText(MapActivity.this, "Tracking stopped.", Toast.LENGTH_SHORT).show();
         fabTrack.setVisibility(View.VISIBLE); // Mostra o botão Start Tracking

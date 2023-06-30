@@ -11,4 +11,6 @@
     <color name="primary">#1976d2</color>
     <color name="dark_30">#4d000000</color>
 
+    <color name = "navigationBarColor">#65B9FB</color>
+
 </resources>

@@ -17,9 +17,6 @@
         android:theme="@style/Theme.TrilhaSegura"
         tools:targetApi="31">
         <activity
-            android:name=".searchPage"
-            android:exported="false" />
-        <activity
             android:name=".OptionActivity"
             android:exported="false" />
         <activity

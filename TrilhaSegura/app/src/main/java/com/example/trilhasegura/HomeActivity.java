@@ -2,6 +2,9 @@ package com.example.trilhasegura;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,64 +12,45 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 
+import com.example.trilhasegura.databinding.ActivityHomeBinding;
+import com.example.trilhasegura.databinding.ActivityMainBinding;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
 
 public class HomeActivity extends AppCompatActivity {
 
-    private Button buttonMap;
+    ActivityHomeBinding binding;
     private BottomNavigationView bottomNavigationView;
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_home);
+        binding = ActivityHomeBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        replaceFragment(new HomeFragment());
 
-        buttonMap = findViewById(R.id.inicializeMap);
+        binding.bottomNavigationView.setOnItemSelectedListener(item -> {
 
-        buttonMap.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(HomeActivity.this, MapActivity.class));
+            if (item.getItemId() == R.id.home){
+                replaceFragment(new HomeFragment());
             }
-        });
-
-        bottomNavigationView = findViewById(R.id.bottomNavigationView);
-        bottomNavigationView.setOnItemSelectedListener(new NavigationBarView.OnItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                if (item.getItemId() == R.id.home) {
-                    // Lógica para lidar com a seleção do Item 1
-                    return true;
-                } else if (item.getItemId() == R.id.search) {
-                    startActivity(new Intent(HomeActivity.this, searchPage.class));
-                    return true;
-                } else if (item.getItemId() == R.id.person) {
-                    // Lógica para lidar com a seleção do Item 3
-                    return true;
-                } else if (item.getItemId() == R.id.settings) {
-                    // Lógica para lidar com a seleção do Item 4
-                    return true;
-                }
-                return false;
+            else if (item.getItemId() == R.id.trails){
+                replaceFragment(new TrailsFragment());
             }
+            else if (item.getItemId() == R.id.settings){
+                replaceFragment(new SettingsFragment());
+            }
+
+            return true;
         });
     }
 
-    private void openItem1Screen() {
-        // Código para abrir a tela correspondente ao Item 1
-    }
+    private void replaceFragment(Fragment fragment){
 
-    private void openItem2Screen() {
-        // Código para abrir a tela correspondente ao Item 2
-    }
-
-    private void openItem3Screen() {
-        // Código para abrir a tela correspondente ao Item 3
-    }
-
-    private void openItem4Screen() {
-        // Código para abrir a tela correspondente ao Item 4
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        fragmentTransaction.replace(R.id.frame_layout, fragment);
+        fragmentTransaction.commit();
     }
 }
