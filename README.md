@@ -71,7 +71,7 @@ O Trilha Segura foi desenvolvido utilizando as seguintes tecnologias e ferrament
 - Banco de dados Firebase: Todos os PINs e rotas estão sendo salvas no banco de dados Firebase.
 - Android Studio: Ambiente de desenvolvimento integrado (IDE) utilizado para criar o aplicativo Android.
 
-## Instalação e Execução
+## <s>Instalação e Execução</s> (Instalação e execução do software pausada)
 
 1. Clone este repositório em sua máquina local.
 
